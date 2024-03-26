@@ -40,6 +40,8 @@ console.log(validUser(5,9)); //validUser is a valid function and therefore is ex
 
 // as soon as function excute at line 33 it can't be accessed any further
 // IIFE_Name("Steve", "Smith");
+
+// 4. Constructor Function - used to create a class like structure 
 function Area(length, width, radius)
 {
     this.length = length;
