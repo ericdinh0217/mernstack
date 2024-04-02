@@ -91,4 +91,7 @@ Index: 4, element: undefined
 Index: 4, element: undefined
 Index: 4, element: undefined
 Index: 4, element: undefined
+The setTimeout function is asynchronous and will execute after the loop has finished. 
+By the time the function inside setTimeout executes, the loop has already completed, and the variable i has a value of 4.
+At this point, arr[4] is undefined because arr has only indices from 0 to 3.
 */
