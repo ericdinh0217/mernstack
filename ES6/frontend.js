@@ -25,3 +25,4 @@
 // bundler, minification, etc... 
 
 // 250kb converts to base64 encoded value => ./public/250kb.jpeg ==> #adas#sadada#asdqmk#aasqi#
+
