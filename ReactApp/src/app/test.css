@@ -14,3 +14,15 @@ h4{
     font-style: oblique;
     border-radius: 5%;
 }
+
+.button{
+    padding:5px;
+    text-align: center;
+    background-color: orangered;
+    border-radius: 1px solid red;
+    margin: 10px;
+}
+
+.success{
+    background-color: aquamarine;
+}
