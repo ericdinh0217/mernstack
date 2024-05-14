@@ -1,9 +1,9 @@
 import React, { Component, PureComponent } from "react";
 
 //this component implements shouldComponentUpdate in itself to reduce the render on state change
-export default class Home extends PureComponent {
+//export default class Home extends PureComponent {
 
-//export default class Home extends Component {
+export default class Home extends Component {
 
     //creation life cycle method
     constructor(props){
@@ -12,12 +12,18 @@ export default class Home extends PureComponent {
 
         this.state = {
             age : 17,
-            userName : "Default"
+            userName : props.parentName
         }
+
+        //props should not be updated as its a readonly value
+        //props.parentName = "random value"
 
         this.incrementAgeLoop = null;
         this.incrementAgeVal = 17;
         this.incrementAge();
+
+        //to access and update the html directly
+        this.address = React.createRef() //this creates a reference which we link with html and then access it
     }
 
     incrementAge = ()=>{
@@ -39,6 +45,9 @@ export default class Home extends PureComponent {
     //html is rendered on browser, executes only after the first render
     componentDidMount(){
         //we can access the html and make calls to server API here to pull the data
+        setTimeout(()=>{
+            this.address.current.value = "New name with reference"
+        },2000)        
     }
 
     //destruction life cycle method
@@ -58,30 +67,41 @@ export default class Home extends PureComponent {
         })
         console.log(value)
         
+        //update the name back in parent by calling callback event
+        this.props.updateNameInParent(value)//sending data back to parent
+
         evt.preventDefault() //will explain in detail
     }
 
     updateName = (evt)=>{
         console.log("Updating the nameto age!!")
+
+        //set state follows with lifecycle methods and updates the states in batch process
         this.setState({
             age : this.state.userName
         })
+
+        //not a recommended way but can call the render method after state update
+        //it skips the life cycle methods like - shouldComponentUpdate
+
+        // this.state.age = this.state.userName
+        // this.forceUpdate();//directly calls the render method to create virtual dom
 
         evt.preventDefault()
     }
 
     // do not implement this if in pure component
     //update life cycle methods
-    // shouldComponentUpdate(nextPops, nextState){
-    //     console.log("nextPops ", nextPops)
-    //     console.log("nextState ", nextState)
+    shouldComponentUpdate(nextPops, nextState){
+        console.log("nextPops ", nextPops)
+        console.log("nextState ", nextState)
 
-    //     if (this.state.age == nextState.userName ) {
-    //         return false // should not call render method to create virtual dom
-    //     } else {
-    //         return true // keep calling render method     
-    //     }
-    // }
+        if (this.state.age == nextState.userName ) {
+            return false // should not call render method to create virtual dom
+        } else {
+            return true // keep calling render method     
+        }
+    }
 
     getSnapshotBeforeUpdate(prevState, prevProps){
         console.log("getSnapshotBeforeUpdate");
@@ -130,6 +150,10 @@ export default class Home extends PureComponent {
                         </div>
                     </div>
                 </div>
+                {this.props.footer}
+
+                {/* uncontrolled component using reference element */}
+                <input type="text" ref={this.address} ></input>
             </div>
         )
     }
