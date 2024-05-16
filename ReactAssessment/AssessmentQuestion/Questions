@@ -1,0 +1,5 @@
+2. React renders the DOM in a conservative manner by minimizing the number of DOM operations required to update the UI. 
+It achieves this through its virtual DOM reconciliation algorithm.
+
+7.The virtual DOM is a lightweight copy of the actual DOM. 
+When changes are made to a React component, instead of directly manipulating the real DOM, React first updates the virtual DOM.
