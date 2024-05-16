@@ -1,5 +1,5 @@
 import React, { Component, PureComponent } from "react";
-
+import {PropTypes} from "prop-types";
 //this component implements shouldComponentUpdate in itself to reduce the render on state change
 //export default class Home extends PureComponent {
 
@@ -12,7 +12,9 @@ export default class Home extends Component {
 
         this.state = {
             age : 17,
-            userName : props.parentName
+            userName : props.parentName,
+            refAddress : "Somewhere on earth",
+            refAge : "Infinity"
         }
 
         //props should not be updated as its a readonly value
@@ -24,6 +26,7 @@ export default class Home extends Component {
 
         //to access and update the html directly
         this.address = React.createRef() //this creates a reference which we link with html and then access it
+        this.age = React.createRef()
     }
 
     incrementAge = ()=>{
@@ -62,9 +65,23 @@ export default class Home extends Component {
         let element = evt.target
         let value = element.value;
 
-        this.setState({
-            userName : value
-        })
+        let classList = element.classList
+
+        if (classList.contains("userName")) {
+            //regex to check the email
+            //value == valid email
+            this.setState({
+                userName : value
+            })
+        } else {
+            //regex to check the number
+            let newVal = value < 110 ? value : 0
+
+            this.setState({
+                age : newVal
+            })
+        }
+        
         console.log(value)
         
         //update the name back in parent by calling callback event
@@ -123,6 +140,20 @@ export default class Home extends Component {
         // })
     }
 
+    formSubmit = (evt)=>{
+        this.address.current.focus()
+        let newAdd = this.address.current.value
+        let newAge = this.age.current.value
+        //alert(newAdd + newAge)
+
+        this.setState({
+            refAge : newAge,
+            refAddress : newAdd
+        })
+
+        //default behaviour of form is to submit but we can stop that by using evt.preventDefault
+        evt.preventDefault()
+    }
 
     //create and update the virtual DOM
     render(){
@@ -139,8 +170,12 @@ export default class Home extends Component {
                             <b>User Name</b>
                         </div>
                         <div className="col-md-7">
-                            <input type="text" className="form-control textbox" value={this.state.userName}
+                            <input type="text" className="form-control textbox userName" value={this.state.userName}
                                 placeholder="Please provide user name" onChange={this.onTextChange}></input>
+                        </div>
+                        <div className="col-md-7">
+                            <input type="text" className="form-control textbox userAge" value={this.state.age}
+                                placeholder="Please provide user age" onChange={this.onTextChange}></input>
                         </div>
 
                         <div className="col-md-3">
@@ -153,12 +188,38 @@ export default class Home extends Component {
                 {this.props.footer}
 
                 {/* uncontrolled component using reference element */}
-                <input type="text" ref={this.address} ></input>
+                {/* <input type="text" ref={this.address} ></input> */}
+
+                <form className="form" action="/api/loginuser" method="post" onSubmit={this.formSubmit}>
+                     <b>Address</b>
+                     <input type="text" placeholder={"Default User Address"} 
+                         ref={this.address} maxLength={20}></input>
+                    <b>Age</b>
+                     <input type="number" placeholder={"Default User Age"} 
+                         ref={this.age} maxLength={20}></input>
+
+                     <button type="submit"> Save </button>
+                 </form>
+
+                 <label>{this.state.refAddress}</label>
+                 <hr/>
+                 <label>{this.state.refAge}</label>
             </div>
         )
     }
 
 }
+
+// Home.defaultProps = {
+//     parentName : "Joe si!!"
+// }
+
+
+//gives the warning if we set it to required
+Home.propTypes = {
+    parentName : PropTypes.string.isRequired
+}
+
 
 //class component 
 //life cycle methods

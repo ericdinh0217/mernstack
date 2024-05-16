@@ -22,6 +22,7 @@ export default class ApplicationComponent extends Component {
         }
     }
 
+    //the parameter will be accepted here when function executes in child component
     updateName = (value)=>{
         
         //alert("Updating the name!!")
@@ -51,9 +52,9 @@ export default class ApplicationComponent extends Component {
                 <b>userName : {this.state.name}</b>
                 <Header userName={this.state.name}/>
                 <Routes>
-                    <Route path="/" element={<Home  parentName={this.state.name} 
+                    <Route path="/" element={<Home  parentName1={this.state.name} 
                             updateNameInParent={this.updateName} />}/>
-                    <Route path="home" element={<Home  parentName={this.state.name}
+                    <Route path="home" element={<Home  parentName1={this.state.name}
                             updateNameInParent={this.updateName} />}/>
                     <Route path="about" element={<About />}/>
                     <Route path="about/:id" element={<About />}/>
